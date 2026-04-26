@@ -1,5 +1,7 @@
 package com.rcoem.devops.interfaces;
 
+import com.rcoem.devops.application.DevopsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,19 +14,17 @@ public class DevopsController {
     @Value("${source.path}")
     private String path;
 
-    @Value("${environment}")
-    private String env;
+    @Autowired
+    DevopsService devopsService;
 
     @GetMapping("/health")
     public ResponseEntity<String> getHealth(){
         return ResponseEntity.ok("Online");
     }
+
     @GetMapping("/env-path")
     public String getPath() {
-        if (env.equalsIgnoreCase("prod")) {
-            return "invoked in prod";
-        }
-        return " invoked in " + env;
+        return  devopsService.getPath();
     }
 
 
